@@ -2,7 +2,6 @@ import {Request, Response} from "express";
 import Song from "../../models/song.model";
 import Topic from "../../models/topic.model";
 import Singer from "../../models/singer.model";
-//lay ra danh sach bai hat theo chu de
 
 export const list = async (req: Request, res: Response) : Promise<void> => {
     const topicSlug = req.params.topicSlug;
@@ -34,4 +33,62 @@ export const list = async (req: Request, res: Response) : Promise<void> => {
         songs: songs,
         topic: topic
     })
+}
+
+export const detail = async (req: Request, res: Response) : Promise<void> => {
+    const songSlug = req.params.songSlug;
+    const song = await Song.findOne(
+        {
+            deleted: false,
+            slug: songSlug,
+            status: "active"
+        }
+    )
+    const singer = await Singer.findOne(
+        {
+            _id: song.singerId,
+            deleted: false
+        }
+    )
+    const topic = await Topic.findOne(
+        {
+            _id: song.topicId,
+            deleted: false
+        }
+    )
+    res.render("client/pages/songs/detail.pug", {
+        pageTitle: "Chi tiết bài hát",
+        song: song,
+        topic: topic,
+        singer: singer
+    })
+}
+export const like = async (req: Request, res: Response) : Promise<void> => {
+    const songId: string = req.params.songId;
+    const typeLike = req.params.typeLike;
+    const song = await Song.findOne(
+        {
+            _id: songId,
+            deleted: false,
+            status: "active"
+        }
+    )
+    const newLike = (typeLike == "Like") ? song.like + 1 : song.like -1;
+    await Song.updateOne(
+        {
+            _id: songId,
+            deleted: false,
+            status: "active"
+        },
+        {
+            like: newLike
+        }
+    )
+    res.json(
+        {
+            code: 200, 
+            msg: "Đã Like",
+            like: newLike
+        }
+    )
 }
