@@ -34,7 +34,10 @@ if (buttonLike) {
         const typeLike = (likeActive) ? "Dislike" : "Like";
         const songId = buttonLike.getAttribute("button-like");
         const link = `/songs/like/${typeLike}/${songId}`;
-        fetch(link)
+        const option = {
+            method: "PATCH"
+        }
+        fetch(link, option)
             .then(
                 res => res.json()
             )
@@ -46,4 +49,23 @@ if (buttonLike) {
                 }
             })
     })
+}
+// end button like
+const buttonFavorite = document.querySelector("[button-favorite]");
+if (buttonFavorite) {
+    console.log(buttonFavorite);
+    buttonFavorite.addEventListener("click", (e) => {
+        e.preventDefault();
+        const isFavorite = buttonFavorite.classList.contains("active");
+        const typeFavorite = isFavorite ? "unFavorite" : "Favorite";
+        const songId = buttonFavorite.getAttribute("button-favorite");
+        const link = `/songs/favorite/${typeFavorite}/${songId}`;
+        fetch(link)
+            .then(res => res.json())
+            .then(data => {
+                if (data.code == 200) {
+                    buttonFavorite.classList.toggle("active");
+                }
+            })
+    })  
 }

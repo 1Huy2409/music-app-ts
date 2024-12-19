@@ -2,7 +2,7 @@ import {Request, Response} from "express";
 import Song from "../../models/song.model";
 import Topic from "../../models/topic.model";
 import Singer from "../../models/singer.model";
-
+import FavoriteSong from "../../models/favorite-song.model";
 export const list = async (req: Request, res: Response) : Promise<void> => {
     const topicSlug = req.params.topicSlug;
     const topic = await Topic.findOne(
@@ -89,6 +89,40 @@ export const like = async (req: Request, res: Response) : Promise<void> => {
             code: 200, 
             msg: "Đã Like",
             like: newLike
+        }
+    )
+}
+export const favorite = async (req: Request, res: Response) : Promise<void> => {
+    const songId : string = req.params.songId;
+    const typeFavorite : string = req.params.typeFavorite;
+    switch(typeFavorite) {
+        case "Favorite":
+            const existFavoriteSong = await FavoriteSong.findOne(
+                {
+                    songId: songId
+                }
+            )
+            if (!existFavoriteSong) {
+                const newFavoriteSong = new FavoriteSong(
+                    {
+                        songId: songId
+                    }
+                )
+                newFavoriteSong.save();
+            }
+            break;
+        case "unFavorite": 
+            await FavoriteSong.deleteOne(
+                {
+                    songId: songId
+                }
+            )
+            break;
+    }
+    res.json(
+        {
+            code: 200, 
+            msg: "Thành công"
         }
     )
 }
