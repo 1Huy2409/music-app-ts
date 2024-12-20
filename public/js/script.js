@@ -70,3 +70,44 @@ if (buttonFavorites) {
     });
   });
 }
+// suggest search
+const boxSearch = document.querySelector(".box-search");
+if (boxSearch) {
+    const inputSearch = document.querySelector("input[name = 'keyword']");
+    if (inputSearch) {
+        inputSearch.addEventListener("keyup", () => {
+            const value = inputSearch.value;
+            const link = `/search/suggest?keyword=${value}`;
+            fetch(link)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code == 200) {
+                        const innerSuggest = boxSearch.querySelector(".inner-suggest");
+                        const innerList = boxSearch.querySelector(".inner-list");
+                        if (data.songs.length > 0) {
+                            let htmls = data.songs.map(item => 
+                                `<a class="inner-item" href="/songs/detail/${item.slug}">
+                                    <div class="inner-image">
+                                        <img src=${item.avatar} />
+                                    </div>
+                                    <div class="inner-info">
+                                        <div class="inner-title">${item.title}</div>
+                                        <div class="inner-singer"><i class="fa-solid fa-microphone-lines"></i>${item.singer.fullName}</div>
+                                    </div>
+                                </a>`
+                            )
+                            htmls = htmls.join("");
+                            innerList.innerHTML = htmls;
+                            innerSuggest.classList.add("show");
+                        }
+                        else {
+                            innerList.innerHTML = "";
+                            innerSuggest.classList.remove("show");
+                        }
+                    }
+                })
+        })
+    }
+}
+
+
