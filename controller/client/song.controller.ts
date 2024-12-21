@@ -126,3 +126,34 @@ export const favorite = async (req: Request, res: Response) : Promise<void> => {
         }
     )
 }
+export const listen = async (req: Request, res: Response) : Promise<void> => {
+    const songId : string = req.params.songId;
+    const song = await Song.findOne(
+        {
+            _id: songId,
+            deleted: false
+        }
+    )
+    const listenUpdate = song.listen + 1;
+    await Song.updateOne(
+        {
+            _id: songId
+        },
+        {
+            listen: listenUpdate
+        }
+    )
+    const newSongUpdate = await Song.findOne(
+        {
+            _id: songId,
+            listen: listenUpdate
+        }
+    )
+    res.json(
+        {
+            code: 200,
+            message: "Thành công",
+            listen: newSongUpdate.listen
+        }
+    )
+}

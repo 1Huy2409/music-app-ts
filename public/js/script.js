@@ -25,6 +25,22 @@ if (aplayer) {
       songAvatar.style.animationPlayState = "paused";
     });
   }
+  ap.on("ended", () => {
+    const link = `/songs/listen/${song._id}`;
+    const option = {
+      method: "PATCH"
+    }
+    fetch(link, option) 
+      .then(res => res.json())
+      .then(data => {
+        if (data.code == 200) {
+          const listenBox = document.querySelector(".inner-actions .inner-listen span");
+          if (listenBox) {
+            listenBox.innerHTML = `${data.listen} lượt nghe`
+          }
+        }
+      })
+  })
 }
 
 // lam like va dislike
