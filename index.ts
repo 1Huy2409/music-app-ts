@@ -7,6 +7,7 @@ import * as database from "./config/database";
 import clientRoutes from "./routes/client/index.route"
 import adminRoutes from "./routes/admin/index.route";
 import { systemConfig } from "./config/config";
+import path = require("path");
 dotenv.config();
 database.connect();
 const app: Express = express();
@@ -17,6 +18,7 @@ app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static("public"));
 app.use(cookieParser());
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 clientRoutes(app);
 adminRoutes(app);
