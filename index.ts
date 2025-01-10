@@ -5,6 +5,8 @@ import methodOverride from "method-override"
 import cookieParser from "cookie-parser"
 import * as database from "./config/database";
 import clientRoutes from "./routes/client/index.route"
+import adminRoutes from "./routes/admin/index.route";
+import { systemConfig } from "./config/config";
 dotenv.config();
 database.connect();
 const app: Express = express();
@@ -15,7 +17,9 @@ app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static("public"));
 app.use(cookieParser());
+app.locals.prefixAdmin = systemConfig.prefixAdmin;
 clientRoutes(app);
+adminRoutes(app);
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
