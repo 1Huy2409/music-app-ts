@@ -45,6 +45,8 @@ export const create = async (req: Request, res: Response) : Promise<void> =>
 }
 export const createPost = async (req: Request, res: Response) : Promise<void> =>
 {
+    const avatarArray: string[] = req.body.avatar;
+    const audioArray: string[] = req.body.audio;
     const dataSong = {
         title: req.body.title,
         topicId: req.body.topicId,
@@ -52,7 +54,8 @@ export const createPost = async (req: Request, res: Response) : Promise<void> =>
         description: req.body.description,
         lyrics: req.body.lyrics,
         status: req.body.status,
-        avatar: req.body.avatar
+        avatar: avatarArray[0],
+        audio: audioArray[0]
     }
     const newSong = new Song(dataSong);
     await newSong.save();
