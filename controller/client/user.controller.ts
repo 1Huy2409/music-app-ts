@@ -22,6 +22,7 @@ export const registerPost = async (req: Request, res: Response) : Promise<void> 
     )
     if (existEmail) {
         console.log("Email nay da ton tai"); // thay bang req.flash()
+        res.redirect("back");
         return;
     }
     const tokenUser = generateHelper.randomString(20);
@@ -48,9 +49,6 @@ export const login = async (req: Request, res: Response) : Promise<void> => {
 }
 // login method post
 export const loginPost = async (req: Request, res: Response) : Promise<void> => {
-    // kiểm tra email
-    console.log(req.body.email);
-    console.log(req.body.password);
     const email: string = req.body.email;
     const password: string = req.body.password;
     const user = await User.findOne(
@@ -63,17 +61,20 @@ export const loginPost = async (req: Request, res: Response) : Promise<void> => 
     if (!user)
     {
         console.log("Tài khoản này không tồn tại!");
+        res.redirect("back");
         return;
     }
     // confirm password
     if (md5(password) !== user.password)
     {
         console.log("Sai mật khẩu, vui lòng nhập lại!");
+        res.redirect("back");
         return;
     }
     res.cookie('tokenUser', user.tokenUser, { expires: new Date(Date.now() + 900000), httpOnly: true });
     res.redirect("/");
 }
+// router log out
 export const logout = async (req: Request, res: Response, next: NextFunction) =>
 {
     res.clearCookie("tokenUser");
