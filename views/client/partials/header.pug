@@ -28,9 +28,23 @@ header.header
             .col-4 
                 .inner-menu
                     ul 
-                        li 
-                            a(href = "/") Trang chủ
-                        li 
-                            a(href = "/topics") Chủ đề
-                        li 
-                            a(href = "/favorite-songs") Bài hát yêu thích
+                        if (user)
+                            li 
+                                a(href = "/") Trang chủ
+                            li 
+                                a(href = "/topics") Chủ đề
+                            li 
+                                a(href = "/favorite-songs") Bài hát yêu thích
+                            li 
+                                a(href = "/user/info") Thông tin cá nhân
+                            li 
+                                a(href = "/user/logout") Đăng xuất 
+                        else 
+                            li 
+                                a(href = "/") Trang chủ
+                            li 
+                                a(href = "/topics") Chủ đề
+                            li 
+                                a(href = "/user/register") Đăng ký
+                            li 
+                                a(href = "/user/login") Đăng nhập

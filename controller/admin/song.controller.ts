@@ -45,6 +45,16 @@ export const create = async (req: Request, res: Response) : Promise<void> =>
 }
 export const createPost = async (req: Request, res: Response) : Promise<void> =>
 {
-    console.log(req.body);
+    const dataSong = {
+        title: req.body.title,
+        topicId: req.body.topicId,
+        singerId: req.body.singerId,
+        description: req.body.description,
+        lyrics: req.body.lyrics,
+        status: req.body.status,
+        avatar: req.body.avatar
+    }
+    const newSong = new Song(dataSong);
+    await newSong.save();
     res.redirect(`${systemConfig.prefixAdmin}/songs`);
 }

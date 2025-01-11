@@ -10,6 +10,10 @@ router.get("/", controller.index);
 // [GET] /admin/songs/create
 router.get("/create", controller.create);
 // [POST] /admin/songs/create
-router.post("/create", upload.single("avatar"), uploadCloud.uploadSingle, controller.createPost);
+router.post("/create", 
+    upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'audio', maxCount: 1 }]), 
+    uploadCloud.uploadSingle, 
+    controller.createPost
+);
 
 export const songRoute : Router = router;
