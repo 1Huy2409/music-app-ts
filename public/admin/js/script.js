@@ -12,3 +12,20 @@ if(uploadImage) {
   });
 }
 // end upload image
+
+// upload audio
+const uploadAudio = document.querySelector("[upload-audio]");
+if (uploadAudio)
+{
+  const uploadAudioInput = uploadAudio.querySelector("[upload-audio-input]");
+  const uploadAudioPlay = uploadAudio.querySelector("[upload-audio-play]");
+  if (uploadAudioInput)
+  {
+    uploadAudioInput.addEventListener("change", ()=>
+    {
+      const file = uploadAudioInput.files[0];
+      uploadAudioPlay.src = URL.createObjectURL(file);
+    })
+  }
+}
+// end upload audio
