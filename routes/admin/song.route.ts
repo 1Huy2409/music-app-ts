@@ -15,5 +15,7 @@ router.post("/create",
     uploadCloud.uploadFields, 
     controller.createPost
 );
-
+// [GET] /admin/songs/edit/:id
+router.get("/edit/:id", controller.edit);
+router.patch("/edit/:id", controller.editPatch);
 export const songRoute : Router = router;

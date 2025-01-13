@@ -62,3 +62,61 @@ export const createPost = async (req: Request, res: Response) : Promise<void> =>
     await newSong.save();
     res.redirect(`${systemConfig.prefixAdmin}/songs`);
 }
+// [GET] /admin/songs/edit/:id
+export const edit = async(req: Request, res: Response) : Promise<void>=>
+{
+    const id = req.params.id;
+    const song = await Song.findOne(
+        {
+            _id: id,
+            deleted: false
+        }
+    )
+    const singers = await Singer.find(
+        {
+            deleted: false, 
+            status: "active"
+        }
+    )
+    const topics = await Topic.find(
+        {
+            deleted: false, 
+            status: "active"
+        }
+    )
+    res.render("admin/pages/songs/edit",
+        {
+            pageTitle: "TRANG CHỈNH SỬA BÀI HÁT",
+            song: song, 
+            singers: singers,
+            topics: topics
+        }
+    )
+}
+// [PATCH] /admin/songs/edit/:id
+export const editPatch = async(req: Request, res: Response) : Promise<void> =>
+{
+    const dataSong = {
+        title: req.body.title,
+        topicId: req.body.topicId,
+        singerId: req.body.singerId,
+        description: req.body.description,
+        lyrics: req.body.lyrics,
+        status: req.body.status
+    };
+    if (req.body.avatar)
+    {
+        dataSong["avatar"] = req.body.avatar[0];
+    }
+    if (req.body.audio)
+    {
+        dataSong["audio"] = req.body.audio[0];
+    }
+    await Song.updateOne(
+        {
+            _id: req.params.id
+        },
+        dataSong
+    )
+    res.redirect("back");
+}
