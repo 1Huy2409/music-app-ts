@@ -43,6 +43,7 @@ export const create = async (req: Request, res: Response) : Promise<void> =>
         }
     )
 }
+// [POST] /admin/songs/create
 export const createPost = async (req: Request, res: Response) : Promise<void> =>
 {
     const avatarArray: string[] = req.body.avatar;

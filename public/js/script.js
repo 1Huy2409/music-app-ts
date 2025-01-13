@@ -6,16 +6,21 @@ if (aplayer) {
   singer = JSON.parse(singer);
   const ap = new APlayer({
     container: aplayer,
+    lrcType: 1,
     audio: [
       {
         name: song.title,
         artist: singer.fullName,
         url: song.audio,
         cover: song.avatar,
+        lrc: `
+          ${song.lyrics}
+        `
       },
     ],
     autoplay: true,
   });
+
   const songAvatar = document.querySelector(".singer-detail .inner-avatar");
   if (songAvatar) {
     ap.on("play", () => {
